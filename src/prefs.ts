@@ -346,16 +346,16 @@ export default class OTilingPreferences extends ExtensionPreferences {
         auraOverlayGroup.add(overlayEnabled);
         settings.bind('active-hint-overlay-enabled', overlayEnabled as any, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        // <2> Opacity slider (Scale 0–100%)
+        // <2> Opacity slider (Scale 0-60%)
         const overlayOpacityRow = new Adw.ActionRow({
             title: _('Overlay Opacity (%)'),
-            subtitle: _('How opaque the tint overlay appears (0 = invisible, 100 = solid)'),
+            subtitle: _('How opaque the tint overlay appears (0 = invisible, 60 = strongest; capped so window content stays visible)'),
         });
         auraOverlayGroup.add(overlayOpacityRow);
 
         const overlayOpacity = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({ lower: 0, upper: 100, step_increment: 1, page_increment: 10 }),
+            adjustment: new Gtk.Adjustment({ lower: 0, upper: 60, step_increment: 1, page_increment: 10 }),
             hexpand: true,
             valign: Gtk.Align.CENTER,
             draw_value: true,
