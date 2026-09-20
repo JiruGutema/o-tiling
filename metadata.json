@@ -6,7 +6,8 @@
     "shell-version": [
         "48",
         "49",
-        "50"
+        "50",
+         "51"
     ],
     "author": "oliwebd",
     "url": "https://github.com/oliwebd/o-tiling"
