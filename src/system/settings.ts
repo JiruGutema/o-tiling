@@ -95,6 +95,7 @@ const WORKSPACE_INDICATOR_STYLE = 'workspace-indicator-style';
 const WORKSPACE_INDICATOR_ACTIVE_STYLE = 'workspace-indicator-active-style';
 const WORKSPACE_INDICATOR_POSITION = 'workspace-indicator-position';
 const WORKSPACE_INDICATOR_SCROLL = 'workspace-indicator-scroll';
+const WORKSPACE_NUMBER_SHORTCUTS = 'workspace-number-shortcuts';
 const WORKSPACE_INDICATOR_SHOW_EMPTY = 'workspace-indicator-show-empty';
 const WORKSPACE_INDICATOR_SHOW_OCCUPIED = 'workspace-indicator-show-occupied';
 const WORKSPACE_INDICATOR_CUSTOM_LABELS = 'workspace-indicator-custom-labels';
@@ -323,6 +324,10 @@ export class ExtensionSettings {
 
     workspace_indicator_scroll(): boolean {
         return this.ext.get_boolean(WORKSPACE_INDICATOR_SCROLL);
+    }
+
+    workspace_number_shortcuts(): boolean {
+        return this.ext.get_boolean(WORKSPACE_NUMBER_SHORTCUTS);
     }
 
     workspace_indicator_show_empty(): boolean {

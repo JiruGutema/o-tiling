@@ -269,6 +269,13 @@ export default class OTilingPreferences extends ExtensionPreferences {
         wsIndicatorGroup.add(wsScrollRow);
         settings.bind('workspace-indicator-scroll', wsScrollRow as any, 'active', Gio.SettingsBindFlags.DEFAULT);
 
+        const wsShortcutsRow = new Adw.SwitchRow({
+            title: _('Super+Number Workspace Shortcuts'),
+            subtitle: _('Super+1–9 switches workspace, Super+Shift+1–9 moves the focused window there. Replaces GNOME\'s Super+Number app shortcuts while enabled'),
+        });
+        wsIndicatorGroup.add(wsShortcutsRow);
+        settings.bind('workspace-number-shortcuts', wsShortcutsRow as any, 'active', Gio.SettingsBindFlags.DEFAULT);
+
         const wsShowEmptyRow = new Adw.SwitchRow({
             title: _('Show Empty Workspaces'),
             subtitle: _('Keep empty workspaces visible alongside active and occupied ones'),

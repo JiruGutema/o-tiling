@@ -389,6 +389,101 @@
             <summary>Move window to the lower workspace</summary>
         </key>
 
+        <key type="b" name="workspace-number-shortcuts">
+            <default>true</default>
+            <summary>Switch to and move windows to workspaces with Super+1..9</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-1">
+            <default><![CDATA[['<Super>1']]]></default>
+            <summary>Switch to workspace 1</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-1">
+            <default><![CDATA[['<Super><Shift>1']]]></default>
+            <summary>Move window to workspace 1</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-2">
+            <default><![CDATA[['<Super>2']]]></default>
+            <summary>Switch to workspace 2</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-2">
+            <default><![CDATA[['<Super><Shift>2']]]></default>
+            <summary>Move window to workspace 2</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-3">
+            <default><![CDATA[['<Super>3']]]></default>
+            <summary>Switch to workspace 3</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-3">
+            <default><![CDATA[['<Super><Shift>3']]]></default>
+            <summary>Move window to workspace 3</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-4">
+            <default><![CDATA[['<Super>4']]]></default>
+            <summary>Switch to workspace 4</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-4">
+            <default><![CDATA[['<Super><Shift>4']]]></default>
+            <summary>Move window to workspace 4</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-5">
+            <default><![CDATA[['<Super>5']]]></default>
+            <summary>Switch to workspace 5</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-5">
+            <default><![CDATA[['<Super><Shift>5']]]></default>
+            <summary>Move window to workspace 5</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-6">
+            <default><![CDATA[['<Super>6']]]></default>
+            <summary>Switch to workspace 6</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-6">
+            <default><![CDATA[['<Super><Shift>6']]]></default>
+            <summary>Move window to workspace 6</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-7">
+            <default><![CDATA[['<Super>7']]]></default>
+            <summary>Switch to workspace 7</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-7">
+            <default><![CDATA[['<Super><Shift>7']]]></default>
+            <summary>Move window to workspace 7</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-8">
+            <default><![CDATA[['<Super>8']]]></default>
+            <summary>Switch to workspace 8</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-8">
+            <default><![CDATA[['<Super><Shift>8']]]></default>
+            <summary>Move window to workspace 8</summary>
+        </key>
+
+        <key type="as" name="workspace-switch-9">
+            <default><![CDATA[['<Super>9']]]></default>
+            <summary>Switch to workspace 9</summary>
+        </key>
+
+        <key type="as" name="workspace-move-to-9">
+            <default><![CDATA[['<Super><Shift>9']]]></default>
+            <summary>Move window to workspace 9</summary>
+        </key>
+
         <key type="as" name="pop-workspace-up">
             <default><![CDATA[['<Super><Shift>Up','<Super><Shift>k']]]></default>
             <summary>Move window to the upper workspace</summary>
