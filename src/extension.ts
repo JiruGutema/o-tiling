@@ -379,6 +379,14 @@ export class Ext extends Ecs.System<ExtEvent> {
         });
         this._settings_signal_ids.push([this.settings.ext, id_ws_num_overview_btn]);
 
+        const id_ws_pos = this.settings.ext.connect('changed::workspace-indicator-position', () => {
+            if (this.settings.workspace_number_indicator()) {
+                _toggle_workspace_number_indicator(false);
+                _toggle_workspace_number_indicator(true);
+            }
+        });
+        this._settings_signal_ids.push([this.settings.ext, id_ws_pos]);
+
         const id_hide_panel = this.settings.ext.connect('changed::hide-panel-icon', () => {
             if (indicator) {
                 indicator.button.visible = !this.settings.hide_panel_icon();
@@ -3959,7 +3967,8 @@ function _toggle_workspace_number_indicator(enable: boolean): void {
     if (enable) {
         if (!workspace_number_indicator) {
             workspace_number_indicator = new PanelSettings.WorkspaceNumberIndicator(ext);
-            currentPanel.addToStatusArea('o-tiling-ws-number', workspace_number_indicator.button, 1, 'left');
+            const pos = ext?.settings?.workspace_indicator_position() ?? 'left';
+            currentPanel.addToStatusArea('o-tiling-ws-number', workspace_number_indicator.button, 1, pos);
         }
         // Hide the GNOME dot indicator if found
         if (builtinIndicator) builtinIndicator.hide();

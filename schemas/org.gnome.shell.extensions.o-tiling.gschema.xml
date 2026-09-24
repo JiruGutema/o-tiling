@@ -44,7 +44,47 @@
 
         <key type="b" name="workspace-number-indicator">
             <default>false</default>
-            <summary>Show a workspace number label (e.g. "2 / 4") in the panel instead of the dot indicator</summary>
+            <summary>Show a workspace indicator on the top panel</summary>
+        </key>
+
+        <key type="s" name="workspace-indicator-style">
+            <default>'numbers'</default>
+            <summary>Workspace indicator style: 'numbers', 'dots' (Hyprland expanding dots), 'roman', or 'index' (e.g. 2 / 4)</summary>
+        </key>
+
+        <key type="s" name="workspace-indicator-active-style">
+            <default>'pill'</default>
+            <summary>Active workspace indicator style: 'pill' (accent fill) or 'outline' (accent border)</summary>
+        </key>
+
+        <key type="s" name="workspace-indicator-position">
+            <default>'left'</default>
+            <summary>Top panel position: 'left' or 'center'</summary>
+        </key>
+
+        <key type="b" name="workspace-indicator-scroll">
+            <default>true</default>
+            <summary>Switch workspaces by scrolling over the indicator</summary>
+        </key>
+
+        <key type="b" name="workspace-indicator-show-empty">
+            <default>true</default>
+            <summary>Show empty workspaces alongside active and occupied ones</summary>
+        </key>
+
+        <key type="b" name="workspace-indicator-show-occupied">
+            <default>true</default>
+            <summary>Visually distinguish occupied workspaces from empty ones</summary>
+        </key>
+
+        <key type="s" name="workspace-indicator-custom-labels">
+            <default>''</default>
+            <summary>Comma-separated custom workspace labels</summary>
+        </key>
+
+        <key type="u" name="workspace-indicator-border-radius">
+            <default>99</default>
+            <summary>Border radius in pixels for workspace indicator buttons (0 = sharp, 99 = full pill)</summary>
         </key>
 
         <key type="b" name="show-overview-button-in-indicator">
