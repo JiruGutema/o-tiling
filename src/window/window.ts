@@ -31,6 +31,9 @@ const WM_TITLE_BLACKLIST: Array<string> = [
     'Tor Browser',
 ];
 
+/** Max settle retries while waiting for Mutter to reflect the tiled rect. */
+const BORDER_SETTLE_MAX_TRIES = 8;
+
 enum RESTACK_STATE {
     RAISED,
     WORKSPACE_CHANGED,
@@ -160,6 +163,15 @@ export class ShellWindow {
 
     /** GLib source ID for the post-tile border-settle delay; suppresses show_border() until Mutter commits the new frame rect. */
     private _border_settle_id: number | null = null;
+
+    /** True while a new window awaits its first auto-tile; suppresses the active hint at the pre-tile frame rect. */
+    private _border_pending_initial_tile: boolean = false;
+
+    /** Pre-tile frame rect; the settle waits for it to change before showing the hint. */
+    private _border_settle_pre_rect: { x: number; y: number; width: number; height: number } | null = null;
+
+    /** Settle retries spent waiting for the tiled frame rect. */
+    private _border_settle_tries: number = 0;
 
     /** GLib source ID coalescing bursts of size/position changes so the border tracks settled Wayland geometry. */
     private _border_layout_debounce_id: number | null = null;
@@ -526,6 +538,9 @@ export class ShellWindow {
         // Bail while the settle timer is active; mark_border_settling() will re-show once geometry is final.
         if (this._border_settle_id !== null) return;
 
+        // A freshly spawned auto-tiled window isn't placed yet — wait for the first tile pass.
+        if (this._border_pending_initial_tile) return;
+
         this.update_border_layout();
         this.update_border_style();
 
@@ -564,17 +579,51 @@ export class ShellWindow {
         }
     }
 
-    /** Hides the border and defers show_border() by 120 ms so Mutter can commit the post-tile frame rect. */
+    /** Suppress the active hint until this window's initial auto-tile pass starts. */
+    suppress_border_until_initial_tile() {
+        this._border_pending_initial_tile = true;
+    }
+
+    /** Hides the border and defers show_border() until Mutter commits the post-tile frame rect. */
     mark_border_settling() {
-        // Cancel any previous settle timer.
+        // The initial tile pass is underway — the settle re-shows the hint at the final geometry.
+        this._border_pending_initial_tile = false;
+
+        this.hide_border();
+
+        // Capture the pre-tile rect so the settle can tell when the window has actually moved.
+        const rect = this.meta.get_frame_rect();
+        this._border_settle_pre_rect = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        this.arm_border_settle();
+    }
+
+    /**
+     * (Re)arms the post-tile settle that holds show_border() until Mutter reflects
+     * the tiled frame rect. Restarting on geometry changes keeps a slow resize
+     * round-trip from exposing the pre-tile position.
+     */
+    private arm_border_settle() {
         if (this._border_settle_id !== null) {
             GLib.source_remove(this._border_settle_id);
             this._border_settle_id = null;
         }
 
-        this.hide_border();
+        this._border_settle_tries = 0;
 
         this._border_settle_id = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 120, () => {
+            const pre = this._border_settle_pre_rect;
+            if (pre !== null) {
+                const now = this.meta.get_frame_rect();
+                const unchanged =
+                    now.x === pre.x && now.y === pre.y &&
+                    now.width === pre.width && now.height === pre.height;
+
+                if (unchanged && ++this._border_settle_tries < BORDER_SETTLE_MAX_TRIES) {
+                    // Mutter hasn't reflected the tile yet — keep the hint hidden.
+                    return GLib.SOURCE_CONTINUE;
+                }
+            }
+
             this._border_settle_id = null;
             // Show only if the border/actor still exist and this window is still focused.
             if (this.border && this.actor_exists() && this.ext.focus_window() === this &&
@@ -710,11 +759,9 @@ export class ShellWindow {
     }
 
     hide_border() {
-        // Cancel the settle timer so it cannot re-show the border after an explicit hide.
-        if (this._border_settle_id !== null) {
-            GLib.source_remove(this._border_settle_id);
-            this._border_settle_id = null;
-        }
+        // Do NOT cancel the settle timer here: focus bookkeeping runs hide_border()
+        // on every window, which would disarm the settle and let a follow-up
+        // show_border() flash the hint at the pre-tile rect.
         const b = this.border;
         if (b) b.hide();
     }
@@ -831,6 +878,10 @@ export class ShellWindow {
 
     private window_changed() {
         if (clutter_focus_is_shell_panel()) return; // skip if focus is on a shell panel/dock
+        // Restart the pending settle on geometry change so the hint appears at the final rect.
+        if (this._border_settle_id !== null) {
+            this.arm_border_settle();
+        }
         this.schedule_border_layout_update();
         if (!this.meta.appears_focused) return; // skip border pipeline if not focused
         this.ext.show_border_on_focused();
