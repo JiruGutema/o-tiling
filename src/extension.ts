@@ -3749,6 +3749,9 @@ export class Ext extends Ecs.System<ExtEvent> {
             };
 
             if (this.auto_tiler && !win.meta.minimized && win.is_tilable(this) && this.is_workspace_tiled(win.workspace_id())) {
+                // Hide the active hint until the first tile pass — prevents it flashing at the centered pre-tile rect.
+                win.suppress_border_until_initial_tile();
+
                 const id = actor.connect('first-frame', () => {
                     // Recover prev_focused from workspace_active if empty before tiling.
                     if (this.auto_tiler && !this.previously_focused(win)) {
