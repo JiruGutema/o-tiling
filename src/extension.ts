@@ -881,6 +881,15 @@ export class Ext extends Ecs.System<ExtEvent> {
         ]);
     }
 
+    /** Cancels a throttled reflow that has been scheduled but not yet fired for this window. */
+    cancel_size_request(win: Window.ShellWindow) {
+        const pending = this.size_requests.get(win.meta);
+        if (pending !== undefined) {
+            utils.source_remove(pending);
+            this.size_requests.delete(win.meta);
+        }
+    }
+
     exception_add(win: Window.ShellWindow) {
         this.exception_selecting = false;
         let d = new add_exception.AddExceptionDialog(
@@ -2054,6 +2063,8 @@ export class Ext extends Ecs.System<ExtEvent> {
                 this.grab_op = new GrabOp.GrabOp(entity, rect);
 
                 this.size_signals_block(win);
+
+                this.cancel_size_request(win); // a queued reflow firing mid-drag would fight the pointer
 
                 /** Display an overlay indicating where the window will be placed if dropped */
 

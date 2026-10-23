@@ -953,6 +953,9 @@ export class Forest extends Ecs.World {
 function move_window(ext: Ext, window: ShellWindow, rect: Rectangle, on_complete: () => void, retries = 0) {
     if (window.destroying) return;
 
+    // Skip repositioning windows that the user is currently grabbing.
+    if (window.grab && ext.grab_op && Ecs.entity_eq(ext.grab_op.entity, window.entity)) return;
+
     if (!(window.meta instanceof Meta.Window)) {
         log.error(`attempting to move a window entity in a tree which lacks a Meta.Window`);
         return;
